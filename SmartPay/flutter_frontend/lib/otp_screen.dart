@@ -35,7 +35,7 @@ class _OTPScreenState extends State<OTPScreen> {
               controller: otpController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                labelText: "Enter OTP",
+                labelText: "Enter OTP dude",
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.lock),
               ),
