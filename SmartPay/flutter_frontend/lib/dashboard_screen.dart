@@ -27,7 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (index == 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AccountDetailsScreen()),
+        MaterialPageRoute(builder: (context) => const AccountDetailsScreen()),
       );
     } else {
       setState(() {
@@ -92,45 +92,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => QRScannerScreen()));
+                            builder: (context) => const QRScannerScreen()));
                   }),
                   _buildQuickActionButton("Pay Contacts", Icons.contacts, () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PayContactsScreen()));
+                            builder: (context) => const PayContactsScreen()));
                   }),
                   _buildQuickActionButton("Pay Phone", Icons.phone, () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PayPhoneScreen()));
+                            builder: (context) => const PayPhoneScreen()));
                   }),
                   _buildQuickActionButton(
                       "Bank Transfer", Icons.account_balance, () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BankTransferScreen()));
+                            builder: (context) => const BankTransferScreen()));
                   }),
                   _buildQuickActionButton("Pay UPI ID", Icons.payment, () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PayUPIScreen()));
+                            builder: (context) => const PayUPIScreen()));
                   }),
                   _buildQuickActionButton("Self Transfer", Icons.swap_horiz,
                       () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SelfTransferScreen()));
+                            builder: (context) => const SelfTransferScreen()));
                   }),
                   _buildQuickActionButton("Self-Help Group", Icons.groups, () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SelfHelpGroupScreen()));
+                            builder: (context) => const SelfHelpGroupScreen()));
                   }),
                 ],
               ),

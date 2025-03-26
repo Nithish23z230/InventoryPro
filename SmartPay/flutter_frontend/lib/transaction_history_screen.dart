@@ -22,7 +22,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
     } else if (index == 1) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => AccountDetailsScreen()),
+        MaterialPageRoute(builder: (context) => const AccountDetailsScreen()),
       );
     } else {
       setState(() {

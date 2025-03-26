@@ -19,7 +19,7 @@ class BankingApp extends StatelessWidget {
           surface: Color(0xFFFAFAFA),
         ),
       ),
-      home: LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }

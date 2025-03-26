@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ElevatedButton(
                   onPressed: generateOTP,
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                  child: Text("Generate OTP"),
+                  child: const Text("Generate OTP"),
                 ),
               ],
             ),
@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
-                child: Text("Send OTP"),
+                child: const Text("Send OTP"),
               ),
             ),
           ],

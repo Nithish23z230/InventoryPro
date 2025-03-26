@@ -62,7 +62,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
-                child: Text("Verify & Login"),
+                child: const Text("Verify & Login"),
               ),
             ),
           ],
