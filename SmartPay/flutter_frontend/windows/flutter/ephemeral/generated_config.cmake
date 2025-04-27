@@ -1,6 +1,6 @@
 # Generated code do not commit.
-file(TO_CMAKE_PATH "C:\\src\\flutter" FLUTTER_ROOT)
-file(TO_CMAKE_PATH "C:\\Users\\ksnk2\\OneDrive\\Desktop\\SmartPay\\SmartPay\\flutter_frontend" PROJECT_DIR)
+file(TO_CMAKE_PATH "C:\\flutter" FLUTTER_ROOT)
+file(TO_CMAKE_PATH "C:\\Users\\NITHISH\\banking_app_repo\\SmartPay\\flutter_frontend" PROJECT_DIR)
 
 set(FLUTTER_VERSION "1.0.0+1" PARENT_SCOPE)
 set(FLUTTER_VERSION_MAJOR 1 PARENT_SCOPE)
@@ -10,14 +10,14 @@ set(FLUTTER_VERSION_BUILD 1 PARENT_SCOPE)
 
 # Environment variables to pass to tool_backend.sh
 list(APPEND FLUTTER_TOOL_ENVIRONMENT
-  "FLUTTER_ROOT=C:\\src\\flutter"
-  "PROJECT_DIR=C:\\Users\\ksnk2\\OneDrive\\Desktop\\SmartPay\\SmartPay\\flutter_frontend"
-  "FLUTTER_ROOT=C:\\src\\flutter"
-  "FLUTTER_EPHEMERAL_DIR=C:\\Users\\ksnk2\\OneDrive\\Desktop\\SmartPay\\SmartPay\\flutter_frontend\\windows\\flutter\\ephemeral"
-  "PROJECT_DIR=C:\\Users\\ksnk2\\OneDrive\\Desktop\\SmartPay\\SmartPay\\flutter_frontend"
-  "FLUTTER_TARGET=C:\\Users\\ksnk2\\OneDrive\\Desktop\\SmartPay\\SmartPay\\flutter_frontend\\lib\\main.dart"
+  "FLUTTER_ROOT=C:\\flutter"
+  "PROJECT_DIR=C:\\Users\\NITHISH\\banking_app_repo\\SmartPay\\flutter_frontend"
+  "FLUTTER_ROOT=C:\\flutter"
+  "FLUTTER_EPHEMERAL_DIR=C:\\Users\\NITHISH\\banking_app_repo\\SmartPay\\flutter_frontend\\windows\\flutter\\ephemeral"
+  "PROJECT_DIR=C:\\Users\\NITHISH\\banking_app_repo\\SmartPay\\flutter_frontend"
+  "FLUTTER_TARGET=C:\\Users\\NITHISH\\banking_app_repo\\SmartPay\\flutter_frontend\\lib\\main.dart"
   "DART_OBFUSCATION=false"
   "TRACK_WIDGET_CREATION=true"
   "TREE_SHAKE_ICONS=false"
-  "PACKAGE_CONFIG=C:\\Users\\ksnk2\\OneDrive\\Desktop\\SmartPay\\SmartPay\\flutter_frontend\\.dart_tool\\package_config.json"
+  "PACKAGE_CONFIG=C:\\Users\\NITHISH\\banking_app_repo\\SmartPay\\flutter_frontend\\.dart_tool\\package_config.json"
 )
