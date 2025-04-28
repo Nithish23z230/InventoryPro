@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart'; // Import your login screen here
+import 'registration_screen.dart'; // Import the registration screen
 
 void main() {
   runApp(const BankingApp());
@@ -20,7 +20,7 @@ class BankingApp extends StatelessWidget {
           surface: Color(0xFFFAFAFA),
         ),
       ),
-      home: const LoginScreen(), // Start with LoginScreen
+      home: const RegistrationScreen(), // Set RegistrationScreen as the home screen
     );
   }
 }
