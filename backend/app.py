@@ -4,8 +4,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# Configure your PostgreSQL Database URL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://aldricanto@localhost/bank_app'
+# ✅ Configure your PostgreSQL Database URL (Correct format: username:password@localhost:5432/dbname)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://aldricanto:smartpay123@localhost:5432/bank_app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -35,6 +35,11 @@ class Transaction(db.Model):
 
 # --- Routes ---
 
+# 🚀 Root Route
+@app.route('/')
+def home():
+    return "Welcome to the Banking App!"
+
 # 🚀 Register Route
 @app.route('/register', methods=['POST'])
 def register():
@@ -44,15 +49,19 @@ def register():
     email = data.get('email')
     password = data.get('password')
 
+    # Validation: Ensure all fields are provided
     if not username or not email or not password:
         return jsonify({"error": "Please provide username, email, and password."}), 400
 
+    # Check if the username or email already exists
     existing_user = User.query.filter(
         (User.username == username) | (User.email == email)
     ).first()
+
     if existing_user:
         return jsonify({"error": "Username or Email already exists."}), 400
 
+    # Create a new user
     new_user = User(username=username, email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
@@ -85,10 +94,12 @@ def link_account():
     if not user:
         return jsonify({"error": "User not found."}), 404
 
+    # Check if the account already exists
     existing_account = Account.query.filter_by(account_number=account_number).first()
     if existing_account:
         return jsonify({"error": "Account already linked."}), 400
 
+    # Create and link a new account
     new_account = Account(user_id=user_id, account_number=account_number)
     db.session.add(new_account)
     db.session.commit()
@@ -135,10 +146,11 @@ def transfer():
     db.session.add(new_transaction)
     db.session.commit()
 
-    # Commit balance updates
-    db.session.commit()
-
-    return jsonify({"message": "Transfer successful!", "sender_balance": str(sender_account.balance), "receiver_balance": str(receiver_account.balance)}), 200
+    return jsonify({
+        "message": "Transfer successful!",
+        "sender_balance": str(sender_account.balance),
+        "receiver_balance": str(receiver_account.balance)
+    }), 200
 
 # 🚀 Transaction History Route
 @app.route('/transaction_history', methods=['GET'])
@@ -151,8 +163,12 @@ def transaction_history():
     if not user:
         return jsonify({"error": "User not found."}), 404
 
+    # Get all accounts linked to the user
+    accounts = Account.query.filter_by(user_id=user.id).all()
+    account_ids = [account.id for account in accounts]
+
     transactions = Transaction.query.filter(
-        (Transaction.sender_account_id == user.id) | (Transaction.receiver_account_id == user.id)
+        (Transaction.sender_account_id.in_(account_ids)) | (Transaction.receiver_account_id.in_(account_ids))
     ).all()
 
     transaction_list = [{
@@ -168,5 +184,5 @@ def transaction_history():
 # --- Start the server ---
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Create all tables from your models
+        db.create_all()  # Create all tables from your models (if not already created)
     app.run(debug=True)
