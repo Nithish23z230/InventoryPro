@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 app = Flask(__name__)
 
-# ✅ Configure your PostgreSQL Database URL (Correct format: username:password@localhost:5432/dbname)
+# ✅ Configure your PostgreSQL Database URL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://aldricanto:smartpay123@localhost:5432/bank_app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -61,8 +62,11 @@ def register():
     if existing_user:
         return jsonify({"error": "Username or Email already exists."}), 400
 
+    # Hash the password before saving it
+    hashed_password = generate_password_hash(password)
+
     # Create a new user
-    new_user = User(username=username, email=email, password=password)
+    new_user = User(username=username, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
 
@@ -77,10 +81,12 @@ def login():
     password = data.get('password')
 
     user = User.query.filter_by(email=email).first()
-    if not user or user.password != password:
+
+    # If the user doesn't exist or the password doesn't match
+    if not user or not check_password_hash(user.password, password):
         return jsonify({"error": "Invalid credentials."}), 401
 
-    return jsonify({"message": "Login successful!"}), 200
+    return jsonify({"message": "Successfully logged in!"}), 200
 
 # 🚀 Link Account Route
 @app.route('/link_account', methods=['POST'])

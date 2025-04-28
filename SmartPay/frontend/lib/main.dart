@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'registration_screen.dart';
+import 'login_screen.dart'; // Import your login screen here
 
 void main() {
   runApp(const BankingApp());
@@ -12,6 +12,7 @@ class BankingApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'SmartPay',
       theme: ThemeData(
         primaryColor: const Color(0xFF1E3A8A),
         colorScheme: const ColorScheme.light(
@@ -19,7 +20,7 @@ class BankingApp extends StatelessWidget {
           surface: Color(0xFFFAFAFA),
         ),
       ),
-      home: const RegistrationScreen(),  // Set RegistrationScreen as home
+      home: const LoginScreen(), // Start with LoginScreen
     );
   }
 }
