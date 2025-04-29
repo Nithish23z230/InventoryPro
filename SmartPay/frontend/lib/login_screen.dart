@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dashboard_screen.dart'; // Import your DashboardScreen here
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,46 +16,67 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  // Dummy credentials for now
-  final String validEmail = 'test@example.com';
-  final String validPassword = 'password123';
+  // Replace this with your actual Flask backend URL
+  final String apiUrl = 'http://10.0.2.2:5000/login'; // Use 10.0.2.2 for Android emulator, localhost for web
 
-  void loginUser() {
+  void loginUser() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
       });
 
-      Future.delayed(const Duration(seconds: 2), () {
+      try {
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'email': emailController.text,
+            'password': passwordController.text,
+          }),
+        );
+
         setState(() {
           isLoading = false;
         });
 
-        if (emailController.text == validEmail && passwordController.text == validPassword) {
-          // If login is successful
+        final responseData = jsonDecode(response.body);
+
+        if (response.statusCode == 200) {
+          // Login success
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(responseData['message'] ?? 'Login successful')),
+          );
+
+          // Navigate to dashboard
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const DashboardScreen()),
           );
         } else {
-          // Show error
+          // Login failed
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Invalid email or password')),
+            SnackBar(content: Text(responseData['error'] ?? 'Login failed')),
           );
         }
-      });
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Network error. Please try again.')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Set the background image here
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/darkbluebg.jpg"), // Your dark blue background image
-            fit: BoxFit.cover, // This makes the image cover the whole screen
+            image: AssetImage("assets/images/darkbluebg.jpg"),
+            fit: BoxFit.cover,
           ),
         ),
         child: Padding(
@@ -61,7 +84,6 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Center(
             child: Column(
               children: [
-                // "SmartPay" heading placed above the glassy box
                 ShaderMask(
                   shaderCallback: (bounds) => LinearGradient(
                     colors: [Colors.blue, Colors.white.withOpacity(0.6)],
@@ -85,14 +107,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 30), // Space between heading and the glassy box
-
-                // Glassy box containing the form
+                const SizedBox(height: 30),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: Colors.white.withOpacity(0.1), // Translucent box
+                    color: Colors.white.withOpacity(0.1),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
@@ -106,14 +126,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        // Email input field
                         TextFormField(
                           controller: emailController,
                           decoration: InputDecoration(
                             labelText: 'Email',
-                            labelStyle: const TextStyle(color: Colors.white), // White color for label
+                            labelStyle: const TextStyle(color: Colors.white),
                             hintText: "Enter your email",
-                            hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // White color for hint
+                            hintStyle: const TextStyle(color: Color(0x80FFFFFF)),
                             border: InputBorder.none,
                             prefixIcon: const Icon(Icons.email, color: Colors.white),
                             filled: true,
@@ -131,14 +150,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        // Password input field
                         TextFormField(
                           controller: passwordController,
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            labelStyle: const TextStyle(color: Colors.white), // White color for label
+                            labelStyle: const TextStyle(color: Colors.white),
                             hintText: "Enter your password",
-                            hintStyle: const TextStyle(color: Color(0x80FFFFFF)), // White color for hint
+                            hintStyle: const TextStyle(color: Color(0x80FFFFFF)),
                             border: InputBorder.none,
                             prefixIcon: const Icon(Icons.lock, color: Colors.white),
                             filled: true,
@@ -157,7 +175,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         const SizedBox(height: 30),
-                        // Login button
                         ElevatedButton(
                           onPressed: isLoading ? null : loginUser,
                           style: ElevatedButton.styleFrom(
@@ -176,10 +193,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                         ),
                         const SizedBox(height: 20),
-                        // Forgot password link
                         TextButton(
                           onPressed: () {
-                            // Navigate to reset password screen (you should define this screen)
+                            // Add navigation to reset password screen
                           },
                           child: const Text(
                             'Forgot password?',

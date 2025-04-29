@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes (can be customized for specific domains)
 
-# ✅ Configure your PostgreSQL Database URL
+# Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://aldricanto:smartpay123@localhost:5432/bank_app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -35,26 +36,20 @@ class Transaction(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
 # --- Routes ---
-
-# 🚀 Root Route
 @app.route('/')
 def home():
     return "Welcome to the Banking App!"
 
-# 🚀 Register Route
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
-    # Validation: Ensure all fields are provided
     if not username or not email or not password:
         return jsonify({"error": "Please provide username, email, and password."}), 400
 
-    # Check if the username or email already exists
     existing_user = User.query.filter(
         (User.username == username) | (User.email == email)
     ).first()
@@ -62,37 +57,39 @@ def register():
     if existing_user:
         return jsonify({"error": "Username or Email already exists."}), 400
 
-    # Hash the password before saving it
-    hashed_password = generate_password_hash(password)
-
-    # Create a new user
-    new_user = User(username=username, email=email, password=hashed_password)
+    new_user = User(username=username, email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
 
     return jsonify({"message": "User registered successfully!"}), 201
 
-# 🚀 Login Route
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-
     email = data.get('email')
     password = data.get('password')
 
     user = User.query.filter_by(email=email).first()
 
-    # If the user doesn't exist or the password doesn't match
-    if not user or not check_password_hash(user.password, password):
-        return jsonify({"error": "Invalid credentials."}), 401
+    if not user:
+        return jsonify({"error": "Email not registered."}), 401
 
-    return jsonify({"message": "Successfully logged in!"}), 200
+    # Check if the entered password matches the one in the database
+    if user.password != password:
+        return jsonify({"error": "Incorrect password."}), 401
 
-# 🚀 Link Account Route
+    return jsonify({
+        "message": "Successfully logged in!",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email
+        }
+    }), 200
+
 @app.route('/link_account', methods=['POST'])
 def link_account():
     data = request.get_json()
-
     user_id = data.get('user_id')
     account_number = data.get('account_number')
 
@@ -100,23 +97,19 @@ def link_account():
     if not user:
         return jsonify({"error": "User not found."}), 404
 
-    # Check if the account already exists
     existing_account = Account.query.filter_by(account_number=account_number).first()
     if existing_account:
         return jsonify({"error": "Account already linked."}), 400
 
-    # Create and link a new account
     new_account = Account(user_id=user_id, account_number=account_number)
     db.session.add(new_account)
     db.session.commit()
 
     return jsonify({"message": "Account linked successfully!"}), 201
 
-# 🚀 Transfer Money Route
 @app.route('/transfer', methods=['POST'])
 def transfer():
     data = request.get_json()
-
     sender_account_id = data.get('sender_account_id')
     receiver_account_number = data.get('receiver_account_number')
     amount = data.get('amount')
@@ -132,17 +125,12 @@ def transfer():
     if not receiver_account:
         return jsonify({"error": "Receiver account not found."}), 404
 
-    # Check if sender has enough balance
     if sender_account.balance < amount:
         return jsonify({"error": "Insufficient funds."}), 400
 
-    # Deduct amount from sender's account
     sender_account.balance -= amount
-
-    # Add amount to receiver's account
     receiver_account.balance += amount
 
-    # Create transaction record
     new_transaction = Transaction(
         sender_account_id=sender_account.id,
         receiver_account_id=receiver_account.id,
@@ -158,7 +146,6 @@ def transfer():
         "receiver_balance": str(receiver_account.balance)
     }), 200
 
-# 🚀 Transaction History Route
 @app.route('/transaction_history', methods=['GET'])
 def transaction_history():
     user_id = request.args.get('user_id')
@@ -169,12 +156,12 @@ def transaction_history():
     if not user:
         return jsonify({"error": "User not found."}), 404
 
-    # Get all accounts linked to the user
     accounts = Account.query.filter_by(user_id=user.id).all()
     account_ids = [account.id for account in accounts]
 
     transactions = Transaction.query.filter(
-        (Transaction.sender_account_id.in_(account_ids)) | (Transaction.receiver_account_id.in_(account_ids))
+        (Transaction.sender_account_id.in_(account_ids)) | 
+        (Transaction.receiver_account_id.in_(account_ids))
     ).all()
 
     transaction_list = [{
@@ -187,8 +174,7 @@ def transaction_history():
 
     return jsonify({"transactions": transaction_list}), 200
 
-# --- Start the server ---
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Create all tables from your models (if not already created)
+        db.create_all()  # Create tables if they don't exist
     app.run(debug=True)
