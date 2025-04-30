@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dashboard_screen.dart';
+import 'registration_screen.dart';  // Import your Registration screen here
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,8 +17,23 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  // Replace this with your actual Flask backend URL
-  final String apiUrl = 'http://10.0.2.2:5000/login'; // Use 10.0.2.2 for Android emulator, localhost for web
+  // Determine whether the app is running on an emulator or physical device
+  final String apiUrl = getApiUrl();
+
+  // Function to return the API URL based on the environment
+  static String getApiUrl() {
+    // Check if the app is running on Android Emulator or Physical Device
+    // You can use any method to determine this, but for now, we are assuming Android Emulator.
+    // Use 10.0.2.2 for emulator or replace it with your machine IP for physical device.
+
+    bool isEmulator = true; // Change this to a method that checks if you're on an emulator or physical device
+
+    if (isEmulator) {
+      return 'http://10.0.2.2:5000/login';  // For Android Emulator
+    } else {
+      return 'http://<your-ip-address>:5000/login';  // Replace <your-ip-address> with your local machine IP for physical devices
+    }
+  }
 
   void loginUser() async {
     if (_formKey.currentState!.validate()) {
@@ -26,18 +42,23 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        final response = await http.post(
-          Uri.parse(apiUrl),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'email': emailController.text,
-            'password': passwordController.text,
-          }),
-        );
+        final response = await http
+            .post(
+              Uri.parse(apiUrl),
+              headers: {'Content-Type': 'application/json'},
+              body: jsonEncode({
+                'email': emailController.text,
+                'password': passwordController.text,
+              }),
+            )
+            .timeout(const Duration(seconds: 10));  // Timeout after 10 seconds
 
         setState(() {
           isLoading = false;
         });
+
+        print("Response Status: ${response.statusCode}");
+        print("Response Body: ${response.body}");
 
         final responseData = jsonDecode(response.body);
 
@@ -62,10 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           isLoading = false;
         });
+        print("Error: $e");
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Network error. Please try again.')),
         );
       }
+    } else {
+      print("Form validation failed.");
     }
   }
 
@@ -199,6 +223,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: const Text(
                             'Forgot password?',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        TextButton(
+                          onPressed: () {
+                            // Navigate to the Registration screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const RegistrationScreen()),
+                            );
+                          },
+                          child: const Text(
+                            "Don't have an account? Register",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

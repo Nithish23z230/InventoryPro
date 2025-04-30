@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'transaction_history_screen.dart';
+import 'enter_banking_details_screen.dart'; // Import your next screen
 
 class AccountDetailsScreen extends StatefulWidget {
   const AccountDetailsScreen({super.key});
@@ -10,7 +11,7 @@ class AccountDetailsScreen extends StatefulWidget {
 }
 
 class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
-  int _selectedIndex = 1;  // Start on Profile tab
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -30,10 +31,8 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
     }
   }
 
-  final String accountHolder = "John Doe";
-  final String maskedAccountNumber = "**** **** **** 1234";
-  final String accountType = "Savings Account";
-  final String balance = "₹50,000";
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -46,36 +45,60 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 30),
+
+            // Email Field
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                prefixIcon: const Icon(Icons.email),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+            ),
+
             const SizedBox(height: 20),
 
-            // Account Holder Section
-            _buildSectionTitle("Account Holder"),
-            _buildSectionValue(accountHolder),
-            const SizedBox(height: 20),
+            // Password Field
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                prefixIcon: const Icon(Icons.lock),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+              ),
+            ),
 
-            // Account Number Section
-            _buildSectionTitle("Account Number"),
-            _buildSectionValue(maskedAccountNumber),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
 
-            // Account Type Section
-            _buildSectionTitle("Account Type"),
-            _buildSectionValue(accountType),
-            const SizedBox(height: 20),
-
-            // Balance Section
-            _buildSectionTitle("Balance"),
-            Text(
-              balance,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF8B4513)),
+            // Enter Banking Details Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF1E3A8A),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const EnterBankingDetailsScreen()),
+                  );
+                },
+                child: const Text(
+                  "Enter Banking Details",
+                  style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+                ),
+              ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           BottomNavigationBarItem(icon: Icon(Icons.receipt_long), label: 'Transactions'),
@@ -84,23 +107,6 @@ class _AccountDetailsScreenState extends State<AccountDetailsScreen> {
         selectedItemColor: Colors.blue[900],
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
-      ),
-    );
-  }
-
-  Widget _buildSectionTitle(String text) {
-    return Text(
-      text,
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey[700]),
-    );
-  }
-
-  Widget _buildSectionValue(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
       ),
     );
   }

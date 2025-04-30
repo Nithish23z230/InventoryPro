@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'registration_screen.dart'; // Import the registration screen
+import 'dashboard_screen.dart'; // Import your dashboard screen
 
 void main() {
   runApp(const BankingApp());
@@ -20,7 +20,7 @@ class BankingApp extends StatelessWidget {
           surface: Color(0xFFFAFAFA),
         ),
       ),
-      home: const RegistrationScreen(), // Set RegistrationScreen as the home screen
+      home: const DashboardScreen(), // ✅ Set Dashboard as initial screen
     );
   }
 }

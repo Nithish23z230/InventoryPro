@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart'; // Import login screen for navigation
+import 'enter_banking_details_screen.dart'; // Import the banking details screen
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -15,12 +16,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
 
-  // Function to handle registration (just for illustration, actual registration logic may differ)
   Future<void> registerUser() async {
-    // Simulate a network request (this should be replaced with actual backend code)
     await Future.delayed(const Duration(seconds: 2));
-
-    // Simulating successful registration
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -29,7 +26,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // Close the dialog
+              Navigator.pop(context);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -48,7 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/darkbluebg.jpg"), // Your background image
+            image: AssetImage("assets/images/darkbluebg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -81,13 +78,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-
-                // Glassy box for registration form
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: Colors.white.withOpacity(0.1), // Translucent box
+                    color: Colors.white.withOpacity(0.1),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
@@ -101,14 +96,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        // Username input field
                         TextFormField(
                           controller: usernameController,
                           decoration: InputDecoration(
                             labelText: 'Username',
-                            labelStyle: const TextStyle(color: Colors.white), // White color for label
+                            labelStyle: const TextStyle(color: Colors.white),
                             hintText: "Enter your username",
-                            hintStyle: const TextStyle(color: Colors.white), // White color for hint
+                            hintStyle: const TextStyle(color: Colors.white),
                             border: InputBorder.none,
                             prefixIcon: const Icon(Icons.person, color: Colors.white),
                             filled: true,
@@ -123,14 +117,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        // Email input field
                         TextFormField(
                           controller: emailController,
                           decoration: InputDecoration(
                             labelText: 'Email',
-                            labelStyle: const TextStyle(color: Colors.white), // White color for label
+                            labelStyle: const TextStyle(color: Colors.white),
                             hintText: "Enter your email",
-                            hintStyle: const TextStyle(color: Colors.white), // White color for hint
+                            hintStyle: const TextStyle(color: Colors.white),
                             border: InputBorder.none,
                             prefixIcon: const Icon(Icons.email, color: Colors.white),
                             filled: true,
@@ -148,14 +141,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        // Password input field
                         TextFormField(
                           controller: passwordController,
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            labelStyle: const TextStyle(color: Colors.white), // White color for label
+                            labelStyle: const TextStyle(color: Colors.white),
                             hintText: "Enter your password",
-                            hintStyle: const TextStyle(color: Colors.white), // White color for hint
+                            hintStyle: const TextStyle(color: Colors.white),
                             border: InputBorder.none,
                             prefixIcon: const Icon(Icons.lock, color: Colors.white),
                             filled: true,
@@ -174,7 +166,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           },
                         ),
                         const SizedBox(height: 30),
-                        // Register button
                         ElevatedButton(
                           onPressed: isLoading ? null : () {
                             if (_formKey.currentState!.validate()) {
@@ -203,8 +194,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   style: TextStyle(fontSize: 18, color: Colors.white),
                                 ),
                         ),
+
                         const SizedBox(height: 20),
-                        // Login link
+
+                        /// 🚨 New Button: "Enter Banking Details"
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const EnterBankingDetailsScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            side: BorderSide(color: Colors.white.withOpacity(0.6)),
+                          ),
+                          child: const Text(
+                            'Enter Banking Details',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -218,7 +233,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               },
                               child: const Text(
                                 "Login",
-                                style: TextStyle(color: Colors.lightBlue), // Light blue color for "Login"
+                                style: TextStyle(color: Colors.lightBlue),
                               ),
                             ),
                           ],
