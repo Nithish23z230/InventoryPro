@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "304610891472",
+    "project_id": "bank-70acf",
+    "storage_bucket": "bank-70acf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304610891472:android:e2c12ab55b783c441130d5",
+        "android_client_info": {
+          "package_name": "com.example.banking_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ5bOJKZ_ITEKZf63M1Txv0HtPxeNs_bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
