@@ -41,7 +41,10 @@ class _SelfHelpGroupScreenState extends State<SelfHelpGroupScreen> {
     TextEditingController amountController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Self Help Group")),
+      appBar: AppBar(
+        title: const Text("Self Help Group"),
+        backgroundColor: const Color(0xFF1E3A8A),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
